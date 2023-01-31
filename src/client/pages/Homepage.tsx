@@ -8,13 +8,19 @@ const Homepage = (props: any) => {
   const [value, setValue] = useState('');
 
   // function handleCompile to send the values from quill to the Judge0 API to be compiled and result handed to us
-  
   function handleCompile() {
     // change inner html of compiler side to 'Compiling your code...'
     // post to judgeAPI and get result
     // upon getting result, change inner html of compiler to the output
     // do whateva
-    
+    console.log(value)
+  }
+
+  // function handleKeyUp will send each keystroke via websocket 
+  function handleKeyUp(e: any) {
+    // e will be target thingy
+    setValue(e)
+    console.log(e)
   }
 
   return (
@@ -30,7 +36,11 @@ const Homepage = (props: any) => {
         <ReactQuill className='pb-3' 
         theme='snow' 
         value={value} 
-        onChange={setValue} 
+        onChange={(e) => {
+          handleKeyUp(e)
+          
+          
+        }} 
         />
         <button className='border-2 w-13 border-gray-300 rounded-full text-gray-400 px-12 py-1 inline-block font-semibold hover:bg-gray-100 hover:text-gray-400'
         onClick={handleCompile}
