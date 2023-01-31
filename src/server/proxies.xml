@@ -1,0 +1,24 @@
+<serviceProxy port="8080">
+ 
+    <headerFilter>
+        <exclude>X-Authenticated-Login</exclude>
+    </headerFilter>
+ 
+    <oauth2Resource publicURL="http://localhost:8080/">
+        <github
+            clientId="fc863cedc9ecd45da5de"
+            clientSecret="da6f0104ab5cf5d90cbd5cb6abf46b69e09ac10a" />
+    </oauth2Resource>
+ 
+    <!-- this will act as the secret resource to make the example simple. See below in the comments for an alternative -->
+    <groovy>
+        def email = exc.request.header.getFirstValue("X-Authenticated-Login")
+        exc.response = Response.ok("Hello " + email + ".").build()
+        RETURN
+    </groovy>
+ 
+    <!--
+    Use the <target> instead of the <groovy> interceptor to forward requests to another host:
+    <target host="membrane-soa.org" port="80" />
+    -->
+</serviceProxy>
