@@ -3,14 +3,20 @@ import { FaGithub, FaRegEnvelope, FaUserLock} from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
-
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  function handleGitHubLogin() {
-    console.log('Will Login From Github Auth')
-  }
+  // navigate hook returning a function to use to navigate to other pages in Router
   const navigate = useNavigate()
 
+  // useState to hold values for email and password
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  // function to handle login with GitHub OAuth
+  function handleGitHubLogin() {
+    console.log('Will Login From Github Auth')
+   
+  }
+  
+  // function to handle login via email and password
   function handleLogin() {
     // make fetch call
     // email and password captured in stateful variables to be passed to proxy server for auth purposes
@@ -18,8 +24,11 @@ const Login = () => {
     navigate('/homepage', {replace: true})
   }
 
-  
-
+  // to login to github, forward to github login screen (passing client ID)
+  // user is on github and logs in (github.com/login)
+  // when login, redirect back to localhsost:8080
+  // localhost:8080?code=SOMETHINGSOMETHING -> when code exists, we know that user is logged in
+  // use code to get access token (one time code) 
   return (
     <div className='flex flex-col items-center justify-center min-h-screen py-2 bg-gray-200'>
       <div className='flex flex-col items-center justify-center w-full flex-1 px-20 text-center'>
