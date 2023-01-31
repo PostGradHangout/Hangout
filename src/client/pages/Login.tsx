@@ -1,34 +1,46 @@
-import React, { useState } from 'react'
-import { FaGithub, FaRegEnvelope, FaUserLock} from 'react-icons/fa'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react';
+import { FaGithub, FaRegEnvelope, FaUserLock } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   // navigate hook returning a function to use to navigate to other pages in Router
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // useState to hold values for email and password
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   // function to handle login with GitHub OAuth
   function handleGitHubLogin() {
-    console.log('Will Login From Github Auth')
-   
+    console.log('Will Login From Github Auth');
+    fetch(`/api/oauth`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      mode: 'no-cors',
+    })
+      .then((result) => result.json())
+      .then((data) => {
+        if (data.success)
+          window.location.href =
+            'https://github.com/login/oauth/authorize?client_id=fc863cedc9ecd45da5de';
+      });
   }
-  
+
   // function to handle login via email and password
   function handleLogin() {
     // make fetch call
     // email and password captured in stateful variables to be passed to proxy server for auth purposes
-    console.log(email, password)
-    navigate('/homepage', {replace: true})
+    console.log(email, password);
+    navigate('/homepage', { replace: true });
   }
 
   // to login to github, forward to github login screen (passing client ID)
   // user is on github and logs in (github.com/login)
   // when login, redirect back to localhsost:8080
   // localhost:8080?code=SOMETHINGSOMETHING -> when code exists, we know that user is logged in
-  // use code to get access token (one time code) 
+  // use code to get access token (one time code)
   return (
     <div className='flex flex-col items-center justify-center min-h-screen py-2 bg-gray-200'>
       <div className='flex flex-col items-center justify-center w-full flex-1 px-20 text-center'>
@@ -38,37 +50,57 @@ const Login = () => {
               <span className='text-blue-300'>The Hangout Spot</span>
             </div>
             <div className='py-10'>
-              <h2 className=' text-3xl font-bold text-blue-300 mb-1'>Sign In</h2>
+              <h2 className=' text-3xl font-bold text-blue-300 mb-1'>
+                Sign In
+              </h2>
               <div className='border-2 w-10 border-blue-300 inline-block mb-2'></div>
               <div className='flex justify-center my-2'>
-                <a href="#" className='border-2 border-gray-300 rounded-full p-3 mx-1' 
-                  onClick={handleGitHubLogin}>  
+                <a
+                  href='#'
+                  className='border-2 border-gray-300 rounded-full p-3 mx-1'
+                  onClick={handleGitHubLogin}
+                >
                   <FaGithub className=' text-2xl' />
                 </a>
               </div>
               <p className='text-gray-400 my-3'>Use your email instead</p>
               <div className='flex flex-col items-center'>
                 <div className='bg-gray-100 w-64 p-2 flex items-center mb-3 rounded-md'>
-                  <FaRegEnvelope className='text-gray-400 m-2'/>
-                  <input type="text" name='email' placeholder='Email' className='bg-gray-100 outline-none text-sm text-gray-600 flex-1'
-                  onChange={(e) => setEmail(e.target.value)}/>
+                  <FaRegEnvelope className='text-gray-400 m-2' />
+                  <input
+                    type='text'
+                    name='email'
+                    placeholder='Email'
+                    className='bg-gray-100 outline-none text-sm text-gray-600 flex-1'
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
                 </div>
                 <div className='bg-gray-100 w-64 p-2 flex items-center mb-3 rounded-md'>
-                  <FaUserLock className='text-gray-400 m-2'/>
-                  <input type="password" name='password' placeholder='Password' className='bg-gray-100 outline-none text-sm text-gray-600 flex-1'
-                  onChange={(e) => setPassword(e.target.value)}/>
+                  <FaUserLock className='text-gray-400 m-2' />
+                  <input
+                    type='password'
+                    name='password'
+                    placeholder='Password'
+                    className='bg-gray-100 outline-none text-sm text-gray-600 flex-1'
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
                 </div>
-                  <button className='border-2 w-13 border-gray-300 rounded-full text-gray-400 px-12 py-1 inline-block font-semibold hover:bg-gray-100 hover:text-gray-400'
-                  onClick={handleLogin}>
-                    Sign In
-                  </button>
+                <button
+                  className='border-2 w-13 border-gray-300 rounded-full text-gray-400 px-12 py-1 inline-block font-semibold hover:bg-gray-100 hover:text-gray-400'
+                  onClick={handleLogin}
+                >
+                  Sign In
+                </button>
               </div>
             </div>
           </div>
           <div className='w-2/5 py-36 px-12 bg-blue-300 text-white rounded-tr-xl rounded-br-xl'>
             <h2 className='text-3xl font-bold mb-2'>Hey Alumn!</h2>
             <div className='border-2 w-10 border-white inline-block mb-2'></div>
-            <p className='mb-7'> Lets get you signed up so you can begin to Collaborate.</p>
+            <p className='mb-7'>
+              {' '}
+              Lets get you signed up so you can begin to Collaborate.
+            </p>
             <button className='border-2 border-white rounded-full px-12 py-1 inline-block font-semibold hover:bg-blue-100 hover:text-blue-300'>
               Sign Up
             </button>
@@ -76,7 +108,7 @@ const Login = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;

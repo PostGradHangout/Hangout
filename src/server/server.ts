@@ -4,14 +4,28 @@ import express, {
   NextFunction,
   RequestHandler,
 } from 'express';
-import oauthController from './controllers/oauthController';
-import cookieController from './controllers/cookieController';
-import userController from './controllers/userController';
-import sessionController from './controllers/sessionController';
+import { oauthController } from './controllers/oauthController';
+import { cookieController } from './controllers/cookieController';
+import { userController } from './controllers/userController';
+import { sessionController } from './controllers/sessionController';
+import cors from 'cors';
 
 type ServerError = string;
 
 const app = express();
+
+app.use(function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  next();
+});
+
+app.use(cors());
 
 app.use(express.json());
 
@@ -21,17 +35,22 @@ app.use(express.json());
 const clientId = 'fc863cedc9ecd45da5de';
 const clientSecret = 'da6f0104ab5cf5d90cbd5cb6abf46b69e09ac10a';
 
-app.get('/oauth', (req, res) => {
-  res.redirect(
-    `https://github.com/login/oauth/authorize?client_id=${clientId}`
-  );
+app.use('/api/oauth2callback', (req, res, next) => {
+  console.log('entered /oauth2callback');
+  return next();
+}, oauthController.setToken, (req, res) => {
+  res.status(200).redirect('./Homepage.tsx');
 });
 
-//get call to /oauth2callback comes directly from GitHub after a successful login
-
-app.get('/oauth2callback', oauthController.setToken, (req, res) => {
-  res.response(200).redirect('./Homepage.tsx');
+app.get('/api/oauth', oauthController.redirect,(req, res) => {
+  console.log('entered /api/oauth');
+  res.status(200).json({success : true})
 });
+// TEST LINK: https://github.com/login/oauth/authorize?client_id=fc863cedc9ecd45da5de
+
+//get call to /oauth2callback comes directly from GitHub with a body of "code" after a successful login
+
+
 
 // user controller, cookie controller, session controller
 
