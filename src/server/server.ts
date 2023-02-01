@@ -35,22 +35,27 @@ app.use(express.json());
 const clientId = 'fc863cedc9ecd45da5de';
 const clientSecret = 'da6f0104ab5cf5d90cbd5cb6abf46b69e09ac10a';
 
-app.use('/api/oauth2callback', (req, res, next) => {
-  console.log('entered /oauth2callback');
-  return next();
-}, oauthController.setToken, (req, res) => {
-  res.status(200).redirect('/homepage');
-});
+app.use(
+  '/api/oauth2callback',
+  (req, res, next) => {
+    console.log('entered /oauth2callback');
+    return next();
+  },
+  oauthController.setToken,
+  (req, res) => {
+    console.log('res.locals.username', res.locals.username);
+    // @ts-ignore
+    res.status(200).redirect('/homepage');
+  }
+);
 
-app.get('/api/oauth', oauthController.redirect,(req, res) => {
+app.get('/api/oauth', oauthController.redirect, (req, res) => {
   console.log('entered /api/oauth');
-  res.status(200).json({success : true})
+  res.status(200).json({ success: true });
 });
 // TEST LINK: https://github.com/login/oauth/authorize?client_id=fc863cedc9ecd45da5de
 
 //get call to /oauth2callback comes directly from GitHub with a body of "code" after a successful login
-
-
 
 // user controller, cookie controller, session controller
 
