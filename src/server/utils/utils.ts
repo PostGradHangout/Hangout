@@ -1,4 +1,4 @@
-import Documents from '../model';
+import Documents from '../models/mongo_model';
 
 const serverUtils = {
   getAllClients: (clients: any, username: any, roomId: any) => {

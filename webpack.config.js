@@ -6,7 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
-  entry: './src/client/App.tsx',
+  entry: './src/client/public/App.tsx',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
@@ -38,7 +38,7 @@ module.exports = {
       chunkFilename: 'styles.css',
     }),
     new HtmlWebpackPlugin({
-      template: './src/client/index.html',
+      template: './src/client/public/index.html',
       filename: './index.html',
     }),
     // new CopyPlugin({
@@ -50,7 +50,7 @@ module.exports = {
       directory: path.join(__dirname, './dist'),
     },
     proxy: {
-      '/': 'http://localhost:3000',
+      '/api': 'http://localhost:3000/',
       secure: false,
       ws: true,
     },

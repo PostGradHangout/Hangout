@@ -23,7 +23,7 @@ const username = v1();
 type Props = { roomId: string; id: string };
 
 function TextEditor(props: Props) {
-  const roomId = 'theRoom';
+  const roomId = 'the ultimate web socket hub :D';
   const [quill, setQuill] = useState<Quill>();
   const [socket, setSocket] = useState<Socket>();
 
