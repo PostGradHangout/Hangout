@@ -39,7 +39,7 @@ app.use('/api/oauth2callback', (req, res, next) => {
   console.log('entered /oauth2callback');
   return next();
 }, oauthController.setToken, (req, res) => {
-  res.status(200).redirect('./Homepage.tsx');
+  res.status(200).redirect('/homepage');
 });
 
 app.get('/api/oauth', oauthController.redirect,(req, res) => {
