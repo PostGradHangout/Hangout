@@ -32,45 +32,38 @@ export const oauthController = {
       .then((response) => {
         console.log('successfully created user');
         console.log('response: ', response);
-        fetch('https://api.github.com/user', {
-          method: 'GET',
-          headers: {
-            Authorization: `${response.token_type} ${response.access_token}`,
-            Accept: 'application/json',
-          },
-        })
-          .then((response) => response.json())
-          .then((response) => {
-            console.log('response from github api', response);
-            res.locals.username = response.login;
-            return next();
-          })
-          .catch((err) => {
-            next({
-              log: `Error in oauthController.setToken in request to github api. Details: ${err}`,
-              message: {
-                err: 'An error occurred in the oauthController.setToken',
-              },
-            });
-          });
+        res.locals.tokenResponse = response;
+        return next();
       })
       .catch((err) => {
-        next({
+        return next({
           log: `Error in oauthController.setToken. Details: ${err}`,
           message: { err: 'An error occurred in the oauthController.setToken' },
         });
       });
   },
-  redirect: (req, res, next) => {
-    console.log('redirect fired');
-    return next();
-    if (err) {
-      (err) => {
+  getUserInfo: (req, res, next) => {
+    console.log('entered oauthController.getUserInfo');
+    fetch('https://api.github.com/user', {
+      method: 'GET',
+      headers: {
+        Authorization: `${res.locals.tokenResponse.token_type} ${res.locals.tokenResponse.access_token}`,
+        Accept: 'application/json',
+      },
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        console.log('response from github api', response);
+        res.locals.userInfo = response;
+        return next();
+      })
+      .catch((err) => {
         return next({
-          log: `Error in oauthController.setToken. Details: ${err}`,
-          message: { err: 'An error occurred in the oauthController.setToken' },
+          log: `Error in oauthController.setToken in request to github api. Details: ${err}`,
+          message: {
+            err: 'An error occurred in the oauthController.setToken',
+          },
         });
-      };
-    }
+      });
   },
 };

@@ -5,10 +5,9 @@ import express, {
   RequestHandler,
 } from 'express';
 import { oauthController } from './controllers/oauthController';
-import { cookieController } from './controllers/cookieController';
 import { userController } from './controllers/userController';
-import { sessionController } from './controllers/sessionController';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 type ServerError = string;
 
@@ -28,6 +27,7 @@ app.use(function (req, res, next) {
 app.use(cors());
 
 app.use(express.json());
+app.use(cookieParser());
 
 // API that redirects to GitHub to authorize the account
 // Successful attempts will redirect to http://localhost:8080/oauth2callback with parameter "code" in query string
@@ -42,17 +42,22 @@ app.use(
     return next();
   },
   oauthController.setToken,
+  oauthController.getUserInfo,
+  userController.createCookie,
   (req, res) => {
-    console.log('res.locals.username', res.locals.username);
     // @ts-ignore
     res.status(200).redirect('/homepage');
   }
 );
 
-app.get('/api/oauth', oauthController.redirect, (req, res) => {
-  console.log('entered /api/oauth');
-  res.status(200).json({ success: true });
+app.get('/api/userInfo', userController.findUser, (req, res) => {
+  res.status(200).json(res.locals.userInfo);
 });
+
+// app.get('/api/oauth', (req, res) => {
+//   console.log('entered /api/oauth');
+//   res.status(200).json({ success: true });
+// });
 // TEST LINK: https://github.com/login/oauth/authorize?client_id=fc863cedc9ecd45da5de
 
 //get call to /oauth2callback comes directly from GitHub with a body of "code" after a successful login

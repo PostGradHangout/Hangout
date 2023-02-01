@@ -25,5 +25,61 @@ export const db = {
 };
 
 // ===========================
-// Table Build SQL Queries (schema):
+// Table Build - SQL Queries (schema):
 // ===========================
+
+// CREATE TABLE hangout (
+//   gitId INT NOT NULL,
+//   gitUsername VARCHAR(100) NOT NULL,
+//   gitAvatar TEXT,
+//   currSession VARCHAR(255) NOT NULL
+// );
+
+// ===========================
+// SQL Queries: Hangout - add new user with session
+// ===========================
+
+// const queryName = {
+//   text: 'INSERT INTO hangout (gitId, gitUsername, gitAvatar, currSession) VALUES ($1, $2, $3, $4)',
+//   values: [
+//     req.body.gitId,
+//     req.body.gitUsername,
+//     req.body.gitAvatar,
+//     req.body.currSession,
+//   ],
+// };
+// db.query(queryName.text, queryName.values);
+
+// ===========================
+// SQL Queries: Hangout - update existing users old session
+// ===========================
+
+// const queryName = {
+//   text: 'UPDATE hangout SET currSession = VALUES ($1) WHERE gitId = VALUES ($2)',
+//   values: [
+//     req.body.newSession,
+//     req.body.gitId],
+// };
+// db.query(queryName.text, queryName.values);
+
+// ===========================
+// SQL Queries: Hangout - does the user exist by gitId - returns a boolean
+// ===========================
+
+// const queryName = {
+//   text: 'EXISTS(SELECT * FROM hangout WHERE VALUES ($1))'
+//   values: [
+//     req.body.gitId],
+// };
+// db.query(queryName.text, queryName.values);
+
+// ===========================
+// SQL Queries: Hangout - pull all user info by session
+// ===========================
+
+// const queryName = {
+//   text: 'SELECT * FROM hangout WHERE currSession = VALUES ($1)',
+//   values: [
+//     req.body.currSession,]
+// };
+// db.query(queryName.text, queryName.values);

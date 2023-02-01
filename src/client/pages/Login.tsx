@@ -13,19 +13,8 @@ const Login = () => {
   // function to handle login with GitHub OAuth
   function handleGitHubLogin() {
     console.log('Will Login From Github Auth');
-    fetch(`/api/oauth`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      mode: 'no-cors',
-    })
-      .then((result) => result.json())
-      .then((data) => {
-        if (data.success)
-          window.location.href =
-            'https://github.com/login/oauth/authorize?client_id=fc863cedc9ecd45da5de';
-      });
+    window.location.href =
+      'https://github.com/login/oauth/authorize?client_id=fc863cedc9ecd45da5de';
   }
 
   // function to handle login via email and password
